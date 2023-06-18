@@ -44,10 +44,10 @@ app.get("/mailboxes",
       const imapWorker: IMAP.Worker = new IMAP.Worker(serverInfo);
       const mailboxes: IMAP.IMailbox[] = await imapWorker.listMailboxes();
       console.log("GET /mailboxes (1): Ok", mailboxes);
-      inResponse.json(mailboxes);
+      inResponse.status(200).json(mailboxes);
     } catch (inError) {
       console.log("GET /mailboxes (1): Error", inError);
-      inResponse.send("error");
+      inResponse.status(500).send("Internal Server Error");
     }
   }
 );
@@ -63,10 +63,10 @@ app.get("/mailboxes/:mailbox",
         mailbox : inRequest.params.mailbox
       });
       console.log("GET /mailboxes (2): Ok", messages);
-      inResponse.json(messages);
+      inResponse.status(200).json(messages);
     } catch (inError) {
       console.log("GET /mailboxes (2): Error", inError);
-      inResponse.send("error");
+      inResponse.status(500).send("Internal Server Error");
     }
   }
 );
@@ -83,10 +83,10 @@ app.get("/messages/:mailbox/:id",
         id : parseInt(inRequest.params.id, 10)
       });
       console.log("GET /messages (3): Ok", messageBody);
-      inResponse.send(messageBody);
+      inResponse.status(200).send(messageBody);
     } catch (inError) {
       console.log("GET /messages (3): Error", inError);
-      inResponse.send("error");
+      inResponse.status(500).send("Internal Server Error");
     }
   }
 );
@@ -103,10 +103,10 @@ app.delete("/messages/:mailbox/:id",
         id : parseInt(inRequest.params.id, 10)
       });
       console.log("DELETE /messages: Ok");
-      inResponse.send("ok");
+      inResponse.status(200).send("Ok");
     } catch (inError) {
       console.log("DELETE /messages: Error", inError);
-      inResponse.send("error");
+      inResponse.status(500).send("Internal Server Error");
     }
   }
 );
@@ -120,10 +120,10 @@ app.post("/messages",
       const smtpWorker: SMTP.Worker = new SMTP.Worker(serverInfo);
       await smtpWorker.sendMessage(inRequest.body);
       console.log("POST /messages: Ok");
-      inResponse.send("ok");
+      inResponse.status(201).send("Created");
     } catch (inError) {
       console.log("POST /messages: Error", inError);
-      inResponse.send("error");
+      inResponse.status(500).send("Internal Server Error");
     }
   }
 );
@@ -137,10 +137,10 @@ app.get("/contacts",
       const contactsWorker: Contacts.Worker = new Contacts.Worker();
       const contacts: IContact[] = await contactsWorker.listContacts();
       console.log("GET /contacts: Ok", contacts);
-      inResponse.json(contacts);
+      inResponse.status(200).json(contacts);
     } catch (inError) {
       console.log("GET /contacts: Error", inError);
-      inResponse.send("error");
+      inResponse.status(500).send("Internal Server Error");
     }
   }
 );
@@ -154,10 +154,10 @@ app.post("/contacts",
       const contactsWorker: Contacts.Worker = new Contacts.Worker();
       const contact: IContact = await contactsWorker.addContact(inRequest.body);
       console.log("POST /contacts: Ok", contact);
-      inResponse.json(contact);
+      inResponse.status(201).json(contact);
     } catch (inError) {
       console.log("POST /contacts: Error", inError);
-      inResponse.send("error");
+      inResponse.status(400).send("Bad Request");
     }
   }
 );
@@ -171,10 +171,10 @@ app.delete("/contacts/:id",
       const contactsWorker: Contacts.Worker = new Contacts.Worker();
       await contactsWorker.deleteContact(inRequest.params.id);
       console.log("Contact deleted");
-      inResponse.send("ok");
+      inResponse.status(200).send("Ok");
     } catch (inError) {
       console.log(inError);
-      inResponse.send("error");
+      inResponse.status(500).send("Internal Server Error");
     }
   }
 );
@@ -190,10 +190,10 @@ app.put("/contacts/:id",
         ...inRequest.body
       });
       console.log("PUT /contacts: Ok", updatedContact);
-      inResponse.json(updatedContact);
+      inResponse.status(200).json(updatedContact);
     } catch (inError) {
       console.log("PUT /contacts: Error", inError);
-      inResponse.send("error");
+      inResponse.status(400).send("Bad Request");
     }
   }
 );

@@ -9,9 +9,9 @@ const Datastore = require("nedb");
 // Define interface to describe a contact.  Note that we'll only have an _id field when retrieving or adding, so
 // it has to be optional.
 export interface IContact {
-  _id?: number,
-  name: string,
-  email: string
+  _id?: number;
+  name: string;
+  email: string;
 }
 
 
@@ -74,18 +74,23 @@ export class Worker {
     console.log("Contacts.Worker.addContact()", inContact);
 
     return new Promise((inResolve, inReject) => {
-      this.db.insert(
-        inContact,
-        (inError: Error, inNewDoc: IContact) => {
-          if (inError) {
-            console.log("Contacts.Worker.addContact(): Error", inError);
-            inReject(inError);
-          } else {
-            console.log("Contacts.Worker.addContact(): Ok", inNewDoc);
-            inResolve(inNewDoc);
+      try {
+        this.db.insert(
+          inContact,
+          (inError: Error, inNewDoc: IContact) => {
+            if (inError) {
+              console.log("Contacts.Worker.addContact(): Error", inError);
+              inReject(inError);
+            } else {
+              console.log("Contacts.Worker.addContact(): Ok", inNewDoc);
+              inResolve(inNewDoc);
+            }
           }
-        }
-      );
+        );
+      } catch (inError) {
+        console.log("Contacts.Worker.addContact(): Error", inError);
+        inReject(inError);
+      }
     });
 
   } /* End addContact(). */
@@ -102,19 +107,24 @@ export class Worker {
     console.log("Contacts.Worker.deleteContact()", inID);
 
     return new Promise((inResolve, inReject) => {
-      this.db.remove(
-        { _id : inID },
-        { },
-        (inError: Error, inNumRemoved: number) => {
-          if (inError) {
-            console.log("Contacts.Worker.deleteContact(): Error", inError);
-            inReject(inError);
-          } else {
-            console.log("Contacts.Worker.deleteContact(): Ok", inNumRemoved);
-            inResolve();
+      try {
+        this.db.remove(
+          { _id : inID },
+          { },
+          (inError: Error, inNumRemoved: number) => {
+            if (inError) {
+              console.log("Contacts.Worker.deleteContact(): Error", inError);
+              inReject(inError);
+            } else {
+              console.log("Contacts.Worker.deleteContact(): Ok", inNumRemoved);
+              inResolve("Error");
+            }
           }
-        }
-      );
+        );
+      } catch (inError) {
+        console.log("Contacts.Worker.deleteContact(): Error", inError);
+        inReject(inError);
+      }
     });
 
   } /* End deleteContact(). */
@@ -130,15 +140,20 @@ export class Worker {
     console.log("Contacts.Worker.updateContact()", inContact);
     
     return new Promise((inResolve, inReject) => {
-      this.db.update({ _id: inContact._id }, inContact, {}, (inError: Error, inNumUpdated: number) => {
-        if (inError) {
-          console.log("Contacts.Worker.updateContact(): Error", inError);
-          inReject(inError);
-        } else {
-          console.log("Contacts.Worker.updateContact(): Ok", inNumUpdated);
-          inResolve(inContact);
-        }
-      });
+      try {
+        this.db.update({ _id: inContact._id }, inContact, {}, (inError: Error, inNumUpdated: number) => {
+          if (inError) {
+            console.log("Contacts.Worker.updateContact(): Error", inError);
+            inReject(inError);
+          } else {
+            console.log("Contacts.Worker.updateContact(): Ok", inNumUpdated);
+            inResolve(inContact);
+          }
+        });
+      } catch (inError) {
+        console.log("Contacts.Worker.updateContact(): Error", inError);
+        inReject(inError);
+      }
     });
   } /* End updateContact(). */
 
