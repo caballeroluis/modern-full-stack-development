@@ -119,5 +119,28 @@ export class Worker {
 
   } /* End deleteContact(). */
 
+  /**
+   * Update a contact.
+   *
+   * @param  inContact The updated contact information.
+   * @return           A promise that eventually resolves to an IContact object (the updated contact).
+   */
+  public updateContact(inContact: IContact): Promise<IContact> {
+
+    console.log("Contacts.Worker.updateContact()", inContact);
+    
+    return new Promise((inResolve, inReject) => {
+      this.db.update({ _id: inContact._id }, inContact, {}, (inError: Error, inNumUpdated: number) => {
+        if (inError) {
+          console.log("Contacts.Worker.updateContact(): Error", inError);
+          inReject(inError);
+        } else {
+          console.log("Contacts.Worker.updateContact(): Ok", inNumUpdated);
+          inResolve(inContact);
+        }
+      });
+    });
+  } /* End updateContact(). */
+
 
 } /* End class. */

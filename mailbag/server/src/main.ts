@@ -179,6 +179,25 @@ app.delete("/contacts/:id",
   }
 );
 
+// Update a contact.
+app.put("/contacts/:id",
+  async (inRequest: Request, inResponse: Response) => {
+    console.log("PUT /contacts", inRequest.body);
+    try {
+      const contactsWorker: Contacts.Worker = new Contacts.Worker();
+      const updatedContact: IContact = await contactsWorker.updateContact({
+        _id: inRequest.params.id,
+        ...inRequest.body
+      });
+      console.log("PUT /contacts: Ok", updatedContact);
+      inResponse.json(updatedContact);
+    } catch (inError) {
+      console.log("PUT /contacts: Error", inError);
+      inResponse.send("error");
+    }
+  }
+);
+
 
 // Start app listening.
 app.listen(80, () => {
