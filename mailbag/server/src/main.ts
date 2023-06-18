@@ -37,6 +37,7 @@ app.use(function(inRequest: Request, inResponse: Response, inNext: NextFunction)
 
 
 // Get list of mailboxes.
+// cURL command for testing: curl -X GET http://localhost/mailboxes
 app.get("/mailboxes",
   async (inRequest: Request, inResponse: Response) => {
     console.log("GET /mailboxes (1)");
@@ -54,6 +55,7 @@ app.get("/mailboxes",
 
 
 // Get list of messages in a mailbox (does NOT include bodies).
+// cURL command for testing: curl -X GET http://localhost/mailboxes/<mailbox_name>
 app.get("/mailboxes/:mailbox",
   async (inRequest: Request, inResponse: Response) => {
     console.log("GET /mailboxes (2)", inRequest.params.mailbox);
@@ -73,6 +75,7 @@ app.get("/mailboxes/:mailbox",
 
 
 // Get a message's plain text body.
+// cURL command for testing: curl -X GET http://localhost/messages/<mailbox_name>/<message_id>
 app.get("/messages/:mailbox/:id",
   async (inRequest: Request, inResponse: Response) => {
     console.log("GET /messages (3)", inRequest.params.mailbox, inRequest.params.id);
@@ -93,6 +96,7 @@ app.get("/messages/:mailbox/:id",
 
 
 // Delete a message.
+// cURL command for testing: curl -X DELETE http://localhost/messages/<mailbox_name>/<message_id>
 app.delete("/messages/:mailbox/:id",
   async (inRequest: Request, inResponse: Response) => {
     console.log("DELETE /messages");
@@ -113,6 +117,7 @@ app.delete("/messages/:mailbox/:id",
 
 
 // Send a message.
+// cURL command for testing: curl -X POST -H "Content-Type: application/json" -d '{"recipient": "recipient@example.com", "subject": "Message subject", "body": "Message body"}' http://localhost/messages
 app.post("/messages",
   async (inRequest: Request, inResponse: Response) => {
     console.log("POST /messages", inRequest.body);
@@ -130,6 +135,7 @@ app.post("/messages",
 
 
 // List contacts.
+// cURL command for testing: curl -X GET http://localhost/contacts
 app.get("/contacts",
   async (inRequest: Request, inResponse: Response) => {
     console.log("GET /contacts");
@@ -147,6 +153,7 @@ app.get("/contacts",
 
 
 // Add a contact.
+// cURL command for testing: curl -X POST -H "Content-Type: application/json" -d '{"name": "Contact name", "email": "contact@example.com"}' http://localhost/contacts
 app.post("/contacts",
   async (inRequest: Request, inResponse: Response) => {
     console.log("POST /contacts", inRequest.body);
@@ -164,6 +171,7 @@ app.post("/contacts",
 
 
 // Delete a contact.
+// cURL command for testing: curl -X DELETE http://localhost/contacts/<contact_id>
 app.delete("/contacts/:id",
   async (inRequest: Request, inResponse: Response) => {
     console.log("DELETE /contacts", inRequest.body);
@@ -180,6 +188,7 @@ app.delete("/contacts/:id",
 );
 
 // Update a contact.
+// cURL command for testing: curl -X PUT -H "Content-Type: application/json" -d '{"name": "New name", "email": "new_contact@example.com"}' http://localhost/contacts/<contact_id>
 app.put("/contacts/:id",
   async (inRequest: Request, inResponse: Response) => {
     console.log("PUT /contacts", inRequest.body);
