@@ -4,7 +4,8 @@
   "description": "MailBag",
   "main": "main.tsx",
   "scripts": {
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "start": "npx webpack-dev-server"
   },
   "author": "Frank W. Zammetti",
   "license": "ISC",

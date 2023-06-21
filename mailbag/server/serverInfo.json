@@ -1,18 +1,20 @@
 {
   "smtp" : {
-    "host" : "my_smtp_server_address",
-    "port" : 465,
+    "host" : "smtp.office365.com",
+    "port" : 587,
+    "secure": true,
     "auth" : {
-      "user" : "my_smtp_username",
-      "pass" : "my_smtp_password"
+      "user" : "lasdfjñalkfj da lsñjfalñsjklsfd@hotmail.com",
+      "pass" : "jalñsd fjlaj fklsjfkl"
     }
   },
   "imap" : {
-    "host" : "my_imap_server_address",
+    "host" : "outlook.office365.com",
     "port" : 993,
+    "secure": true,
     "auth" : {
-      "user" : "my_imap_username",
-      "pass" : "my_imap_password"
+      "user" : "añlsf jalskñjflñasfjl asjdflajlñfjls@hotmail.com",
+      "pass" : "jñalsdfjlñajdlf ñaksfjl añsfjdas"
     }
   }
 }
