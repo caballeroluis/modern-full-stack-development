@@ -4,6 +4,8 @@ import { InputBase } from "@material-ui/core";
 import { TextField } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 /**
  * MessageView.
@@ -45,12 +47,14 @@ const MessageView = ({ state }) => (
       InputProps={{ style : { color : "#000000" } }} onChange={ state.fieldChangeHandler } />
     <br />
 
-    { /* ----- Message body. ----- */ }
-    { state.currentView === "compose" &&
-      <TextField margin="dense" id="messageBody" variant="outlined" fullWidth={ true } multiline={ true } rows={ 12 }
-      value={ state.messageBody } disabled={ state.currentView === "message" }
-      InputProps={{ style : { color : "#000000" } }} onChange={ state.fieldChangeHandler } />
-    }
+    { /* ----- Message body with WYSIWYG. ----- */ }
+    {state.currentView === "compose" && (
+      <ReactQuill
+        id="messageBody"
+        value={ state.messageBody }
+        onChange={ state.fieldChangeHandle }
+      />
+    )}
     
     { /* ----- Sanitized Message body. ----- */ }
     { state.currentView === "message" &&
