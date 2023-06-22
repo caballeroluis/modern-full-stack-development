@@ -3,7 +3,7 @@ import React from "react";
 import { InputBase } from "@material-ui/core";
 import { TextField } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-
+import Typography from "@material-ui/core/Typography";
 
 /**
  * MessageView.
@@ -46,9 +46,23 @@ const MessageView = ({ state }) => (
     <br />
 
     { /* ----- Message body. ----- */ }
-    <TextField margin="dense" id="messageBody" variant="outlined" fullWidth={ true } multiline={ true } rows={ 12 }
+    { state.currentView === "compose" &&
+      <TextField margin="dense" id="messageBody" variant="outlined" fullWidth={ true } multiline={ true } rows={ 12 }
       value={ state.messageBody } disabled={ state.currentView === "message" }
       InputProps={{ style : { color : "#000000" } }} onChange={ state.fieldChangeHandler } />
+    }
+    
+    { /* ----- Sanitized Message body. ----- */ }
+    { state.currentView === "message" &&
+      <Typography
+        id="messageBody"
+        onChange={ state.fieldChangeHandler } 
+        dangerouslySetInnerHTML={{
+          __html:
+          state.messageBody
+        }}
+      />
+    }
 
     { /* ----- Buttons. ----- */ }
 

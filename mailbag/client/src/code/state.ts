@@ -3,7 +3,7 @@ import * as Contacts from "./Contacts";
 import { config } from "./config";
 import * as IMAP from "./IMAP";
 import * as SMTP from "./SMTP";
-
+import DOMPurify from "dompurify";
 
 /**
  * This function must be called once and only once from BaseLayout.
@@ -103,12 +103,16 @@ export function createState(inParentComponent) {
       this.state.showHidePleaseWait(true);
       const imapWorker: IMAP.Worker = new IMAP.Worker();
       const mb: String = await imapWorker.getMessageBody(inMessage.id, this.state.currentMailbox);
+      
+      // Use DOMPurify to sanitize the message body.
+      const sanitizedBody = DOMPurify.sanitize(mb);
+      
       this.state.showHidePleaseWait(false);
 
       // Update state.
       this.setState({ currentView : "message",
         messageID : inMessage.id, messageDate : inMessage.date, messageFrom : inMessage.from,
-        messageTo : "", messageSubject : inMessage.subject, messageBody : mb
+        messageTo : "", messageSubject : inMessage.subject, messageBody : sanitizedBody
       });
 
     }.bind(inParentComponent), /* End showMessage(). */
