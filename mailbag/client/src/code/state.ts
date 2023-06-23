@@ -44,6 +44,8 @@ export function createState(inParentComponent) {
     contactName : null,
     contactEmail : null,
 
+    // The file currently selected.
+    file: null,
 
     // ------------------------------------------------------------------------------------------------
     // ------------------------------------ View Switch functions -------------------------------------
@@ -299,6 +301,14 @@ export function createState(inParentComponent) {
 
     }.bind(inParentComponent), /* End fieldChangeHandler(). */
 
+    /**
+     * Handle file change event.
+     *
+     * @param {Event} event The file change event.
+     */
+    fileChangeHandler : function(event: any) {
+      this.setState({ file: event.target.files[0] });
+    }.bind(inParentComponent),
 
     /**
      * Save contact.
