@@ -15,22 +15,22 @@ import ListItemText from "@material-ui/core/ListItemText";
  */
 const ContactList = ({ state }) => (
 
-  <List>
-
-    {state.contacts.map(value => {
-      return (
+    <List>
+      {state.contacts.map((value) => {
+        const imageSource = value.image ? `data:image/png;base64,${value.image}` : null;
+        return (
         <ListItem key={ value } button onClick={ () => state.showContact(value._id, value.name, value.email) }>
-          <ListItemAvatar>
-            <Avatar>
-              <Person />
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText primary={ `${value.name}` } />
-        </ListItem>
-      );
-    })}
+            <ListItemAvatar>
+              <Avatar src={imageSource} alt={value.name}>
+                {!imageSource && <Person />}
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText primary={value.name} />
+          </ListItem>
+        );
+      })}
 
-  </List>
+    </List>
 
 ); /* End Contacts. */
 

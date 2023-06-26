@@ -1,8 +1,11 @@
 // Node imports.
 import path from "path";
+import fs from "fs";
 
 // Library imports.
 import express, { Express, NextFunction, Request, Response } from "express";
+import multer from "multer";
+import { v4 as uuidv4 } from "uuid";
 
 // App imports.
 import { serverInfo } from "./ServerInfo";
@@ -32,6 +35,18 @@ app.use(function(inRequest: Request, inResponse: Response, inNext: NextFunction)
   inNext();
 });
 
+// Multer configuration.
+const storage = multer.diskStorage({
+  destination: "uploads/", // Carpeta de destino para almacenar las imágenes.
+  filename: (req, file, cb) => {
+    const extension = path.extname(file.originalname);
+    const filename = `${uuidv4()}${extension}`;
+    cb(null, filename); // Nombre de archivo único generado con UUID.
+  }
+});
+
+// Middleware for uploading images using Multer.
+const upload = multer({ storage });
 
 // ---------- RESTful endpoint operations begin. ----------
 
@@ -206,6 +221,35 @@ app.put("/contacts/:id",
     }
   }
 );
+
+// Upload a profile picture for the Contact.
+// curl -X POST -F "image=@/paht/to/image.png" -F "contactId=<contact_id>" http://localhost/upload-avatar
+app.post("/upload-avatar", upload.single("image"), async (req: any, res) => {
+  const filename = req.file.filename;
+  console.log("Uploaded image filename:", filename);
+
+    // Delete the uploaded image file from the "uploads" folder
+    const imagePath = path.join(__dirname, "uploads", filename);
+    fs.unlink(imagePath, async (error) => {
+      if (error) {
+        console.log("Error deleting uploaded image:", error);
+        res.status(500).send("Internal Server Error");
+      } else {
+        console.log("Uploaded image deleted:", filename);
+
+        try {
+          const contactsWorker: Contacts.Worker = new Contacts.Worker();
+          const imageBase64 = await contactsWorker.saveImage(filename, req.body.contactId);
+          console.log("Image saved in the database:", imageBase64);
+          res.status(200).send("Image uploaded and saved successfully");
+        } catch (error) {
+          console.log("Error saving image in the database:", error);
+          res.status(500).send("Internal Server Error");
+        }
+        
+      }
+    });
+});
 
 
 // Start app listening.

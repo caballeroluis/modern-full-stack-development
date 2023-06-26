@@ -197,7 +197,7 @@ export function createState(inParentComponent) {
       const cl = this.state.contacts.slice(0);
 
       // Add new element.
-      cl.push({ _id : inContact._id, name : inContact.name, email : inContact.email });
+      cl.push({ _id : inContact._id, name : inContact.name, email : inContact.email, image : inContact.image });
 
       // Update list in state.
       this.setState({ contacts : cl });

@@ -12,6 +12,7 @@ export interface IContact {
   _id?: number;
   name: string;
   email: string;
+  image?: string;
 }
 
 
@@ -156,6 +157,40 @@ export class Worker {
       }
     });
   } /* End updateContact(). */
+
+  
+  /**
+   * Save an image with the specified filename and internal ID.
+   *
+   * @param filename The name of the image file.
+   * @param inID The ID of the Conctact.
+   * @return A promise that resolves to the path of the saved image.
+   */
+  public async saveImage(filename: string, inID: string): Promise<string> {
+    const fs = require("fs");
+    const path = require("path");
+  
+    const imagePath = path.join(__dirname, "../../server/uploads", filename);
+    const imageData = fs.readFileSync(imagePath, { encoding: "base64" });
+  
+    return new Promise<string>((resolve, reject) => {
+      this.db.update(
+        { _id: inID },
+        { $set: { image: imageData } },
+        { returnUpdatedDocs: true },
+        (error: Error, numUpdated: number, updatedDoc: any) => {
+          if (error) {
+            console.log("Contacts.Worker.saveImage(): Error", error);
+            reject(error);
+          } else {
+            console.log("Contacts.Worker.saveImage(): Ok", updatedDoc);
+            resolve(updatedDoc.image);
+          }
+        }
+      );
+    });
+  }
+  
 
 
 } /* End class. */
