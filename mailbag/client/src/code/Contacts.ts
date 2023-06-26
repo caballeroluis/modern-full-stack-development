@@ -32,7 +32,7 @@ export class Worker {
    * Add a contact to the server.
    *
    * @oaram  inContact The contact to add.
-   * @return           The inContact object, but now with a _id field added.
+   * @return The inContact object, but now with a _id field added.
    */
   public async addContact(inContact: IContact): Promise<IContact> {
 
@@ -42,7 +42,24 @@ export class Worker {
     return response.data;
 
   } /* End addContact(). */
+  
 
+  public async saveContactImage(inContactID: string, acceptedFiles: any): Promise<void> {
+    try {
+      const formData = new FormData();
+      formData.append("image", acceptedFiles[0]);
+      formData.append("contactId", inContactID);
+      console.log("formData", formData);
+      console.log("inContactID", inContactID);
+      const response = await axios.post(`${config.serverAddress}/upload-avatar`, formData);
+      console.log("Image uploaded and saved successfully");
+      return response.data;
+    } catch (error) {
+      console.log("Error saving image in the database:", error);
+      throw error;
+    }
+  }
+  
 
   /**
    * Delete a contact from the server.

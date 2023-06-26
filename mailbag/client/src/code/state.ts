@@ -335,7 +335,26 @@ export function createState(inParentComponent) {
 
     }.bind(inParentComponent), /* End saveContact(). */
 
+    /**
+     * Save contact image.
+     */
+    saveContactImage : async function(acceptedFiles: any) {
+    try {
+      const contactsWorker: Contacts.Worker = new Contacts.Worker();
+      contactsWorker.saveContactImage(this.state.contactID, acceptedFiles);
+      console.log("Image saved for contact with ID:", this.state.contactID);
+      // TODO: update state with the new image.
+    } catch (error) {
+      console.log("Error saving image for contact with ID:", this.state.contactID, error);
+    }
+    
+    }.bind(inParentComponent), /* End saveContact(). */
 
+    // Set the selected file.
+    setFile: function (selectedFile) {
+      this.setState({ file: selectedFile });
+    }.bind(inParentComponent),
+    
     /**
      * Delete the currently viewed contact.
      */

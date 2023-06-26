@@ -13,7 +13,7 @@ import { TextField } from "@material-ui/core";
 const ContactView = ({ state }) => {
   const onDrop = (acceptedFiles) => {
     console.log(acceptedFiles);
-    // Do something with the dropped files
+    state.saveContactImage(acceptedFiles);
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
@@ -31,6 +31,19 @@ const ContactView = ({ state }) => {
       <br />
       { /* Hide.show buttons as appropriate.  Note that we have to use this form of onClick() otherwise the event  */ }
       { /* object would be passed to addContact() and the branching logic would fail. */ }
+
+
+      { state.currentView === "contact" && 
+        <div className="dragImageBox" {...getRootProps()}>
+          <input {...getInputProps()} accept="image/*" />
+          {isDragActive ? (
+            <p>Drop the picture here ...</p>
+          ) : (
+            <p>Drag 'n' drop some pictures here, or click to select files</p>
+          )}
+        </div>
+      }
+      
       { state.currentView === "contactAdd" && 
         <Button variant="contained" color="primary" size="small" style={{ marginTop:10 }}
         onClick={ state.saveContact }>
@@ -47,14 +60,6 @@ const ContactView = ({ state }) => {
         <Button variant="contained" color="primary" size="small" style={{ marginTop:10 }}
         onClick={ () => state.showComposeMessage("contact") }>Send Email</Button>
       }
-      <div {...getRootProps()}>
-        <input {...getInputProps()} />
-        {isDragActive ? (
-          <p>Drop the files here ...</p>
-        ) : (
-          <p>Drag 'n' drop some files here, or click to select files</p>
-        )}
-      </div>
     </form>
   );
 

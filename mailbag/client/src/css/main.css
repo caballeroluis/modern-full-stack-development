@@ -62,3 +62,8 @@
 .messageInfoField {
   color : #000000!important;
 }
+
+.dragImageBox {
+  border: 1px solid rgba(0, 0, 0, 0.28);
+  border-radius: 4px;
+}

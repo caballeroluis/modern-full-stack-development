@@ -19,12 +19,12 @@ const ContactList = ({ state }) => (
       {state.contacts.map((value) => {
         const imageSource = value.image ? `data:image/png;base64,${value.image}` : null;
         return (
-        <ListItem key={ value } button onClick={ () => state.showContact(value._id, value.name, value.email) }>
+          <ListItem key={ value } button onClick={ () => state.showContact(value._id, value.name, value.email) }>
             <ListItemAvatar>
-              <Avatar src={imageSource} alt={value.name}>
-                {!imageSource && <Person />}
-              </Avatar>
-            </ListItemAvatar>
+                <Avatar src={imageSource} alt={value.name}>
+                  {!imageSource && <Person />}
+                </Avatar>
+              </ListItemAvatar>
             <ListItemText primary={value.name} />
           </ListItem>
         );
